@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.bezkoder.spring.login.models.User;
+import com.bezkoder.spring.login.models.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {

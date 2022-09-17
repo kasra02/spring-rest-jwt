@@ -1,4 +1,4 @@
-package com.bezkoder.spring.login.models;
+package com.bezkoder.spring.login.models.entity;
 
 import java.util.HashSet;
 import java.util.Set;

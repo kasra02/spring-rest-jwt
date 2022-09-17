@@ -1,4 +1,4 @@
-package com.bezkoder.spring.login.controllers;
+package com.bezkoder.spring.login.api;
 
 import java.util.HashSet;
 import java.util.List;
@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.bezkoder.spring.login.payload.response.UserInfoResponse2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -22,12 +23,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bezkoder.spring.login.models.ERole;
-import com.bezkoder.spring.login.models.Role;
-import com.bezkoder.spring.login.models.User;
+import com.bezkoder.spring.login.models.entity.ERole;
+import com.bezkoder.spring.login.models.entity.Role;
+import com.bezkoder.spring.login.models.entity.User;
 import com.bezkoder.spring.login.payload.request.LoginRequest;
 import com.bezkoder.spring.login.payload.request.SignupRequest;
-import com.bezkoder.spring.login.payload.response.UserInfoResponse;
 import com.bezkoder.spring.login.payload.response.MessageResponse;
 import com.bezkoder.spring.login.repository.RoleRepository;
 import com.bezkoder.spring.login.repository.UserRepository;
@@ -63,16 +63,18 @@ public class AuthController {
 
     UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-    ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
+    String jwtCookie = jwtUtils.generateJwtCookie(userDetails);
+
 
     List<String> roles = userDetails.getAuthorities().stream()
         .map(item -> item.getAuthority())
         .collect(Collectors.toList());
 
-    return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-        .body(new UserInfoResponse(userDetails.getId(),
+    return ResponseEntity.ok()
+        .body(new UserInfoResponse2(userDetails.getId(),
                                    userDetails.getUsername(),
                                    userDetails.getEmail(),
+                                   jwtCookie,
                                    roles));
   }
 
